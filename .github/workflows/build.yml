@@ -1,4 +1,4 @@
-name: Build 1.52.7 Dylib PRO
+name: Build 1.52.7 Dylib FINAL
 
 on:
   push:
@@ -12,24 +12,17 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Cache Theos
-      uses: actions/cache@v4
-      with:
-        path: theos
-        key: theos-2026-${{ hashFiles('**') }}
-
     - name: Setup Theos v1.4
       uses: Randomblock1/theos-action@v1
       with:
         theos-dir: theos
-        sdk: iphoneos
+        orion: false
 
     - name: Build Package
-      run: |
-        make clean package FINALPACKAGE=1
+      run: make package FINALPACKAGE=1
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: CriticalOpsWin-1.52.7-PRO
+        name: CriticalOpsWin-1.52.7
         path: packages/*.dylib
