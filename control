@@ -1,0 +1,6 @@
+Package: com.fbh.criticalopswin
+Name: CriticalOpsWin
+Version: 1.52.7
+Architecture: iphoneos-arm64e
+Description: ioswins ESP/Aimbot/NoRecoil/Chams/Radar 1.52.7 by FBHacker
+Depends: ellekit
