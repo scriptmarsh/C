@@ -7,19 +7,30 @@ on:
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-14  # Latest stable Mac runner
     steps:
-    - uses: actions/checkout@v4
-    - name: Install Theos & ElleKit
-      uses: Randomblock1/theos-action@v2
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+
+    - name: Cache Theos & SDKs (Speed Boost)
+      uses: actions/cache@v4
       with:
-        sdkver: 18.1
+        path: |
+          theos
+          ~/theos_sdks_cache
+        key: theos-cache-${{ runner.os }}-2026
+
+    - name: Setup Theos
+      uses: Randomblock1/theos-action@v1  # FIXED: v1 not v2
+      with:
+        theos-dir: theos
+        orion: 'false'  # No Orion needed
+
     - name: Build Tweak
       run: make package FINALPACKAGE=1
-    - name: Upload Dylibs
+
+    - name: Upload Dylibs Artifact
       uses: actions/upload-artifact@v4
       with:
         name: CriticalOpsWin-1.52.7
-        path: |
-          packages/*.dylib
-          .theos/obj/*.dylib
+        path: packages/*.dylib
