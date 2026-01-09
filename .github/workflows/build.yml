@@ -1,4 +1,4 @@
-name: Build 1.52.7 Dylib
+name: Build 1.52.7 Dylib PRO
 
 on:
   push:
@@ -7,30 +7,29 @@ on:
 
 jobs:
   build:
-    runs-on: macos-14  # Latest stable Mac runner
+    runs-on: macos-14
     steps:
-    - name: Checkout Repo
+    - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Cache Theos & SDKs (Speed Boost)
+    - name: Cache Theos
       uses: actions/cache@v4
       with:
-        path: |
-          theos
-          ~/theos_sdks_cache
-        key: theos-cache-${{ runner.os }}-2026
+        path: theos
+        key: theos-2026-${{ hashFiles('**') }}
 
-    - name: Setup Theos
-      uses: Randomblock1/theos-action@v1  # FIXED: v1 not v2
+    - name: Setup Theos v1.4
+      uses: Randomblock1/theos-action@v1
       with:
         theos-dir: theos
-        orion: 'false'  # No Orion needed
+        sdk: iphoneos
 
-    - name: Build Tweak
-      run: make package FINALPACKAGE=1
+    - name: Build Package
+      run: |
+        make clean package FINALPACKAGE=1
 
-    - name: Upload Dylibs Artifact
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: CriticalOpsWin-1.52.7
+        name: CriticalOpsWin-1.52.7-PRO
         path: packages/*.dylib
