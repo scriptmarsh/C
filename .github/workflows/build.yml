@@ -1,0 +1,25 @@
+name: Build 1.52.7 Dylib
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install Theos & ElleKit
+      uses: Randomblock1/theos-action@v2
+      with:
+        sdkver: 18.1
+    - name: Build Tweak
+      run: make package FINALPACKAGE=1
+    - name: Upload Dylibs
+      uses: actions/upload-artifact@v4
+      with:
+        name: CriticalOpsWin-1.52.7
+        path: |
+          packages/*.dylib
+          .theos/obj/*.dylib
